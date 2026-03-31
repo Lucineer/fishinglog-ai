@@ -1,0 +1,36 @@
+{
+  "name": "fishinglog-ai",
+  "version": "0.1.0",
+  "description": "Edge AI fishing vessel system — Jetson-powered species classification, captain voice interface, conversational training. Powered by cocapn.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc --noEmit",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "vision:test": "tsx src/vision.ts --test",
+    "audio:test": "tsx src/audio.ts --test",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "fishing",
+    "edge-ai",
+    "jetson",
+    "species-classification",
+    "voice-interface",
+    "cocapn",
+    "commercial-fishing"
+  ],
+  "author": "Superinstance",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "tsx": "^4.16.0",
+    "vitest": "^2.0.0",
+    "@types/node": "^20.14.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

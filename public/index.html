@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fishinglog.ai — Edge AI Co-Captain for Fishing Vessels</title>
+  <meta name="description" content="Jetson-powered species classification, captain voice interface, and conversational training for commercial fishing vessels.">
+  <meta property="og:title" content="fishinglog.ai — Edge AI Co-Captain">
+  <meta property="og:description" content="The AI first mate that earns its sea legs alongside you.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0ea5e9">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐟</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060d16; --bg-card: #0c1829; --bg-hover: #122240;
+      --border: #1a3055; --border-light: #234068;
+      --text: #e2e8f0; --text-muted: #8899b3; --text-dim: #4a6480;
+      --accent: #0ea5e9; --accent-hover: #0284c7; --accent-glow: rgba(14, 165, 233, 0.12);
+      --accent2: #22d3ee; --warning: #f59e0b; --danger: #ef4444; --success: #22c55e;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.5);
+      --transition: 0.2s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(6,13,22,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; }
+    .nav-icon { font-size: 1.4rem; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem 4rem; background: radial-gradient(ellipse at 50% 0%, var(--accent-glow) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(34,211,238,0.06) 0%, transparent 50%); }
+    .hero-badge { display: inline-block; padding: 0.4rem 1rem; border: 1px solid var(--border-light); border-radius: 999px; font-size: 0.8rem; color: var(--accent2); margin-bottom: 2rem; letter-spacing: 0.05em; }
+    .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
+    .gradient-text { background: linear-gradient(135deg, var(--accent), var(--accent2), #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 600px; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.95rem; transition: all var(--transition); border: none; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border-light); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .btn-large { padding: 1rem 2rem; font-size: 1.05rem; }
+    .hero-stats { display: flex; gap: 3rem; margin-top: 3rem; justify-content: center; }
+    .stat { display: flex; flex-direction: column; align-items: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 0.8rem; color: var(--text-dim); }
+    .section-title { text-align: center; font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 3rem; font-size: 1.05rem; }
+    .features { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; transition: all var(--transition); }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(14,165,233,0.08); }
+    .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700; }
+    .feature-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+    .pipeline { padding: 6rem 2rem; max-width: 900px; margin: 0 auto; }
+    .pipeline-step { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2rem; }
+    .pipeline-number { flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; }
+    .pipeline-content h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+    .pipeline-content p { color: var(--text-muted); font-size: 0.9rem; }
+    .pipeline-code { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 1rem; font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent2); margin-top: 0.5rem; overflow-x: auto; }
+    .cta { padding: 6rem 2rem; text-align: center; background: radial-gradient(ellipse at 50% 100%, var(--accent-glow) 0%, transparent 60%); }
+    .cta-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .cta-subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .footer { border-top: 1px solid var(--border); padding: 2rem; }
+    .footer-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .footer-brand { font-weight: 700; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: var(--text-muted); font-size: 0.85rem; }
+    .footer-note { color: var(--text-dim); font-size: 0.8rem; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 768px) { .nav-links a:not(.nav-cta) { display: none; } .hero-stats { gap: 1.5rem; } }
+    @media (max-width: 480px) { .hero-actions { flex-direction: column; width: 100%; } .btn { width: 100%; justify-content: center; } }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <nav class="nav">
+      <div class="nav-brand">
+        <span class="nav-icon">🐟</span>
+        <span>fishinglog.ai</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="https://github.com/Lucineer/fishinglog-ai" target="_blank">GitHub</a>
+      </div>
+    </nav>
+
+    <div class="hero-content fade-in">
+      <div class="hero-badge">Edge AI · Jetson Powered · Voice First</div>
+      <h1 class="hero-title">
+        The AI Co-Captain<br>
+        <span class="gradient-text">That Earns Its Sea Legs</span>
+      </h1>
+      <p class="hero-subtitle">
+        Real-time species classification, captain voice interface, and conversational training — running entirely on your vessel's Jetson Orin Nano.
+      </p>
+      <div class="hero-actions">
+        <a href="https://github.com/Lucineer/fishinglog-ai" class="btn btn-primary">View on GitHub</a>
+        <a href="#pipeline" class="btn btn-secondary">See How It Works</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">15 FPS</span>
+          <span class="stat-label">edge inference</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">300+</span>
+          <span class="stat-label">species</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">100%</span>
+          <span class="stat-label">offline capable</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <h2 class="section-title">Built for the Bridge, Not the Lab</h2>
+    <p class="section-subtitle">Every feature designed with captains, for captains</p>
+
+    <div class="feature-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">👁️</div>
+        <h3>Species Classification</h3>
+        <p>Dual-model architecture: fast edge detection for 25 common species, cloud ensemble for 300+. Captain corrects, the model learns.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🎙️</div>
+        <h3>Voice-First Interface</h3>
+        <p>"Hey Cap, log 15 tuna." Voice commands through waterproof headset with noise suppression. Works in any weather, any sea state.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🎓</div>
+        <h3>Conversational Training</h3>
+        <p>Correct a misidentification and the system creates a training triplet. Every correction makes the next trip more accurate.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🚨</div>
+        <h3>Smart Alerts</h3>
+        <p>Protected species bycatch detection, quota monitoring, weather warnings. Adaptive thresholds prevent alert fatigue.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📡</div>
+        <h3>Works Offline</h3>
+        <p>All critical functions run locally on Jetson. Cloud sync when connected via Starlink or 4G. No internet required at sea.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📋</div>
+        <h3>Automated Logbook</h3>
+        <p>Vision + voice confirmation creates catch records. Auto-formats for NOAA, DFO, and other regulatory agencies.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pipeline" class="pipeline">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">From camera to logbook in seconds</p>
+
+    <div class="pipeline-step fade-in">
+      <div class="pipeline-number">1</div>
+      <div class="pipeline-content">
+        <h3>See</h3>
+        <p>Two IP67 cameras capture the deck and catch area. Frames selected at 2Hz, classified locally at 15 FPS by YOLOv8-nano.</p>
+        <div class="pipeline-code">Camera → Frame Selection → YOLOv8-nano (FP16) → Detections</div>
+      </div>
+    </div>
+
+    <div class="pipeline-step fade-in">
+      <div class="pipeline-number">2</div>
+      <div class="pipeline-content">
+        <h3>Hear</h3>
+        <p>Waterproof headset with noise suppression. Wake word "Hey Cap" activates command recognition powered by local Whisper-tiny.</p>
+        <div class="pipeline-code">Mic → RNNoise → Wake Word → Whisper-tiny → Intent → Action</div>
+      </div>
+    </div>
+
+    <div class="pipeline-step fade-in">
+      <div class="pipeline-number">3</div>
+      <div class="pipeline-content">
+        <h3>Learn</h3>
+        <p>Captain corrections create training triplets. Uploaded to cloud when connected. Next OTA update improves the edge model.</p>
+        <div class="pipeline-code">Correction → (image, wrong_label, correct_label) → Cloud Retrain → OTA Update</div>
+      </div>
+    </div>
+
+    <div class="pipeline-step fade-in">
+      <div class="pipeline-number">4</div>
+      <div class="pipeline-content">
+        <h3>Report</h3>
+        <p>Catch records auto-generated from vision + voice. Formatted for regulatory submission. Stored locally, synced when online.</p>
+        <div class="pipeline-code">Detection + Confirmation → Catch Record → SQLite → Auto-sync → NOAA/DFO Format</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2 class="cta-title">The best AI earns its sea legs alongside you.</h2>
+    <p class="cta-subtitle">Open source. Edge-first. Captain-owned.</p>
+    <div class="cta-actions">
+      <a href="https://github.com/Lucineer/fishinglog-ai" class="btn btn-primary btn-large">View on GitHub</a>
+      <a href="https://github.com/Lucineer/fishinglog-ai/blob/main/docs/ARCHITECTURE.md" class="btn btn-secondary btn-large">Read the Architecture</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">🐟 fishinglog.ai</div>
+      <div class="footer-links">
+        <a href="https://github.com/Lucineer/fishinglog-ai">GitHub</a>
+        <a href="https://github.com/Lucineer/fishinglog-ai/blob/main/LICENSE">MIT License</a>
+        <a href="https://github.com/Lucineer/fishinglog-ai/issues">Issues</a>
+      </div>
+      <div class="footer-note">Built on <a href="https://github.com/nichochar/cocapn" target="_blank">cocapn</a> — the repo IS the agent.</div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

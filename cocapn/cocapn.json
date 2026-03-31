@@ -1,0 +1,56 @@
+{
+  "name": "fishinglog-ai",
+  "version": "0.1.0",
+  "description": "Edge AI fishing vessel system",
+  "domain": "fishinglog.ai",
+  "vertical": "fishinglog",
+  "template": "edge-ai",
+  "agent": {
+    "name": "FishingCoCaptain",
+    "avatar": "🐟",
+    "tone": "maritime, professional, calm under pressure",
+    "model": "deepseek-chat",
+    "soul": "cocapn/soul.md"
+  },
+  "hardware": {
+    "edge_device": "jetson-orin-nano-8gb",
+    "cameras": 2,
+    "microphone": "waterproof-headset",
+    "gps": "nmea-2000",
+    "storage": "1tb-nvme"
+  },
+  "modules": {
+    "vision": {
+      "enabled": true,
+      "edge_model": "yolov8-nano-fp16",
+      "cloud_model": "ensemble-resnet50-vit-small",
+      "common_species": 25,
+      "cloud_species": 300,
+      "edge_fps": 15,
+      "cloud_fps": 2
+    },
+    "audio": {
+      "enabled": true,
+      "wake_word": "hey-cap",
+      "stt_model": "whisper-tiny",
+      "noise_suppression": "rnnoise",
+      "always_listening_buffer_seconds": 30
+    },
+    "alerts": {
+      "enabled": true,
+      "channels": ["voice", "tablet", "sms"],
+      "priorities": ["critical", "operational", "informational"]
+    },
+    "reporting": {
+      "enabled": true,
+      "formats": ["noaa", "dfo"],
+      "auto_sync": true,
+      "local_retention_days": 30
+    }
+  },
+  "connectivity": {
+    "primary": "dual-sim-4g",
+    "failover": "starlink-rv",
+    "local": "wifi-tablet"
+  }
+}
