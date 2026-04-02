@@ -1,0 +1,12 @@
+name = "fishinglog-ai"
+main = "src/worker.ts"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "MEMORY"
+id = "6eb837f3c266424497edde309a82f35f"
+
+[vars]
+AGENT_NAME = "FishingLog"
+AGENT_TONE = "knowledgeable, outdoorsy, patient"
+AGENT_AVATAR = "🎣"
