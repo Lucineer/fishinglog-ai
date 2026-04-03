@@ -87,7 +87,7 @@ export const BUILTIN_PROVIDERS: LLMProvider[] = [
   {
     id: 'siliconflow', name: 'SiliconFlow', baseUrl: 'https://api.siliconflow.com/v1',
     defaultModel: 'deepseek-ai/DeepSeek-V3.2', authType: 'bearer',
-    models: ['deepseek-ai/DeepSeek-V3.2', 'deepseek-ai/DeepSeek-R1', 'zai-org/GLM-5', 'zai-org/GLM-5V-Turbo', 'moonshotai/Kimi-K2.5', 'Qwen/Qwen3-VL-235B-A22B-Instruct', 'MiniMaxAI/MiniMax-M2.5', 'stepfun-ai/Step-3.5-Flash'],
+    models: ['deepseek-ai/DeepSeek-V3.2', 'deepseek-ai/DeepSeek-R1', 'zai-org/GLM-5', 'zai-org/GLM-5V-Turbo', 'moonshotai/Kimi-K2.5', 'Qwen/Qwen3-Coder-480B-A35B-Instruct, Qwen/Qwen3-VL-235B-A22B-Instruct', 'MiniMaxAI/MiniMax-M2.5', 'stepfun-ai/Step-3.5-Flash'],
     helpUrl: 'https://cloud.siliconflow.cn', color: '#6366f1',
   },
 ];
