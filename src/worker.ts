@@ -1,3 +1,5 @@
+import { addNode, addEdge, traverse, crossDomainQuery, findPath, domainStats, getDomainNodes } from './lib/knowledge-graph.js';
+import { loadSeedIntoKG, FLEET_REPOS, loadAllSeeds } from './lib/seed-loader.js';
 import { loadBYOKConfig, callLLM, generateSetupHTML } from './lib/byok.js';
 import { evapPipeline } from './lib/evaporation-pipeline.js';
 
