@@ -1,4 +1,6 @@
 import { loadBYOKConfig, callLLM, generateSetupHTML } from './lib/byok.js';
+import { evapPipeline } from './lib/evaporation-pipeline.js';
+
 import { getTracker } from './lib/confidence-tracker.js';
 import { getRouter } from './lib/model-router.js';
 
