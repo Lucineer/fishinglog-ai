@@ -34,6 +34,10 @@ export default {
     }
 
     // ── Phase 1B: Confidence tracking endpoint ──
+    if (u.pathname === '/api/evaporation') return new Response(JSON.stringify({ hot: [], warm: [], coverage: 0, repo: 'fishinglog-ai', timestamp: Date.now() }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+    if (u.pathname === '/api/kg') return new Response(JSON.stringify({ nodes: [], edges: [], domain: 'fishinglog-ai', timestamp: Date.now() }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+    if (u.pathname === '/api/memory') return new Response(JSON.stringify({ patterns: [], repo: 'fishinglog-ai', timestamp: Date.now() }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+    if (u.pathname === '/api/seed') return new Response(JSON.stringify({ seed: 'fishinglog-ai', modules: ['fish-ai'], version: '1.0.0' }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
     if (u.pathname === '/api/confidence') {
       if (req.method === 'GET') {
         return new Response(JSON.stringify(tracker.getAll()), {
