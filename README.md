@@ -1,151 +1,111 @@
-# fishinglog.ai
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
+</p>
 
-> **Edge AI Co-Captain for Commercial Fishing Vessels**
-> Jetson-powered species classification, captain voice interface, conversational training. Built on [cocapn](https://github.com/nichochar/cocapn).
+<h1 align="center">fishinglog-ai</h1>
+
+<p align="center">Edge AI fishing vessel. Species classification, captain voice, conversational training.</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#the-fleet">The Fleet</a> ·
+  <a href="https://github.com/Lucineer/fishinglog-ai/issues">Issues</a>
+</p>
 
 ---
 
-## Vision
+**Live:** [fishinglog-ai](https://fishinglog-ai.casey-digennaro.workers.dev) · **Powered by [Capitaine](https://github.com/Lucineer/capitaine) · [Cocapn](https://github.com/Lucineer/cocapn)**
 
-fishinglog.ai is an edge AI system that serves as a co-captain on commercial fishing vessels. It combines real-time vision, voice interaction, and conversational training to make fishing operations safer, more compliant, and more efficient.
+The repo IS the agent. fishinglog-ai is a cocapn vessel — a self-improving repository that runs on Cloudflare Workers, thinks with LLMs, and coordinates with the fleet through git.
 
-**Core Philosophy**: "AI as First Mate" — always assists, never autonomously decides. All critical decisions remain with the captain.
+## Quick Start
+
+```bash
+# Fork and deploy
+gh repo fork Lucineer/fishinglog-ai --clone
+cd fishinglog-ai
+npx wrangler login
+echo "your-github-token" | npx wrangler secret put GITHUB_TOKEN
+echo "your-llm-key" | npx wrangler secret put DEEPSEEK_API_KEY
+npx wrangler deploy
+```
+
+That's it. The vessel is alive.
+
+## Features
+
+- **BYOK v2** — Zero keys in code. All API keys via Cloudflare Secrets Store.
+- **Multi-model** — DeepSeek, SiliconFlow, DeepInfra, Moonshot, z.ai, local models.
+- **Session memory** — Conversations persist and build context over time.
+- **PII safety** — Automatic detection and dehydration of sensitive data.
+- **Rate limiting** — Guest tokens per IP with configurable limits.
+- **Health checks** — Standard `/health` endpoint on all vessels.
+- **Fleet coordination** — CRP-39 protocol for trust, bonds, and events.
 
 ## Architecture
 
-### Hardware Stack
-- **Primary**: Jetson Orin Nano 8GB (Edge AI)
-- **Sensors**: 2x IP67 4K fisheye cameras (deck + catch area), waterproof headset microphone, GPS/NMEA 2000 interface
-- **Connectivity**: Dual SIM 4G router + Starlink RV (failover), local WiFi for tablets
-- **Storage**: 1TB NVMe SSD for local data, 30-day rolling buffer
-
-### Component Architecture
-
-#### 1. Vision Pipeline
-```
-[Camera Stream] → Jetson: Frame Selection @ 2Hz
-                → Local YOLOv8-nano (FP16) → [Detections]
-                → Async Upload → Cloud → Megadetector-L → [Validated Labels]
-```
-
-#### 2. Captain Voice Interface
-```
-[Headset Mic] → Noise Suppression (RNNoise) → Wake Word → Command Classifier
-              → Local Whisper-tiny → Intent Recognition → Action Execution
-              → Always-listening buffer (30s rolling) for incident capture
-```
-
-#### 3. Real-time Species Classification
-- **Edge**: EfficientNet-B0 (quantized) → 25 common species @ 15 FPS
-- **Cloud**: Ensemble(ResNet50, ViT-small) → 300+ species @ 2 FPS async
-- Returns: species, IUCN status, regulations, market price
-
-#### 4. Conversational Training
-Captain corrections are captured as training triplets (image, wrong_label, correct_label) and queued for cloud retraining. Next OTA update improves the edge model.
-
-#### 5. Alert System
-- **CRITICAL**: Bycatch of protected species, gear failure detection
-- **OPERATIONAL**: Quota approaching, weather change, equipment maintenance
-- **INFORMATIONAL**: Species price change, new fishing grounds nearby
-
-#### 6. Automated Catch Reporting
-Vision + Voice confirmation → Catch Record → Local SQLite → Auto-sync → Regulatory format conversion (NOAA, DFO, etc.)
-
-### Data Flow
-```
-Local (Jetson):
-  SQLite + Redis Edge Cache
-  → 30-day rolling storage
-  → Async upload queue
-
-Cloud (AWS/GCP):
-  S3: Raw images, audio
-  Cloud SQL: Processed data
-  SageMaker: Model training
-
-Sync Priority: Alerts > Corrections > Catch data > Images
-```
-
-## Failure Resilience
-- **Power loss**: UPS + graceful shutdown trigger
-- **Jetson failure**: Tablet operates basic logging via 4G direct
-- **Network loss**: All critical functions remain operational offline
-- **Storage corruption**: Dual SQLite + CSV logging, cloud restore
-
-## Captain UX Principles
-1. Voice-first, not voice-only — physical buttons for critical functions
-2. Confirm, don't assume — always seek confirmation for uncertain classifications
-3. Progressive disclosure — advanced features unlock as captain gains confidence
-4. Maritime idioms — uses fishing terminology, not AI jargon
-5. Glove-compatible — large touch targets, high contrast displays
-
-## Regulatory & Compliance
-- **Data ownership**: Captain owns all data, can delete at any time
-- **Privacy**: Crew faces automatically blurred in cloud processing
-- **Legal**: Catch records cryptographically signed, immutable audit trail
-- **Export controls**: No data crosses jurisdictions without explicit permission
-
-## Project Structure
+Single-file Cloudflare Worker. Zero runtime dependencies. Inline HTML serving.
 
 ```
-fishinglog-ai/
-├── cocapn/
-│   ├── soul.md              # Fishing vessel AI personality
-│   └── cocapn.json           # cocapn configuration
-├── src/
-│   ├── index.ts              # Entry point
-│   ├── vision.ts             # Species classification pipeline
-│   ├── audio.ts              # Captain voice interface
-│   └── alerts.ts             # Species mismatch alerts
-├── public/
-│   └── index.html            # Landing page
-├── docs/
-│   └── ARCHITECTURE.md       # Full architecture spec
-├── package.json
-├── tsconfig.json
-├── LICENSE
-└── README.md
+src/
+  worker.ts      # The hull — serves users, runs heartbeats
+lib/
+  byok.ts        # Multi-model routing (BYOK v2)
+  ...
 ```
 
-## Development
+## The Fleet
 
-```bash
-# Install dependencies
-npm install
+fishinglog-ai is one of 40+ autonomous vessels in the Lucineer fleet. Each vessel is a different domain of one intelligence.
 
-# Run in development mode
-npm run dev
 
-# Run tests
-npm test
+<details>
+<summary><strong>⚓ The Fleet</strong></summary>
 
-# Type check
-npm run build
-```
+**Flagship vessels**
 
-## Deployment
+- [cocapn.ai](https://github.com/Lucineer/capitaine)
+- [personallog.ai](https://github.com/Lucineer/personallog-ai)
+- [businesslog.ai](https://github.com/Lucineer/businesslog-ai)
+- [studylog.ai](https://github.com/Lucineer/studylog-ai)
+- [makerlog.ai](https://github.com/Lucineer/makerlog-ai)
+- [playerlog.ai](https://github.com/Lucineer/playerlog-ai)
+- [dmlog.ai](https://github.com/Lucineer/dmlog-ai)
+- [reallog.ai](https://github.com/Lucineer/reallog-ai)
+- [deckboss.ai](https://github.com/Lucineer/deckboss-ai)
 
-### Edge (Jetson Orin Nano)
-```bash
-# Build for Jetson
-npm run build
-# Deploy via OTA or USB
-scp -r dist/ jetson@192.168.1.100:~/fishinglog-ai/
-```
+**Fleet services**
 
-### Cloud Sync Service
-Deployed separately — handles model training, data aggregation, and regulatory reporting.
+- [Fleet Catalog](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+- [Git Agent (full)](https://github.com/Lucineer/git-agent)
+- [Cocapn Lite (minimal)](https://github.com/Lucineer/cocapn-lite)
+- [Fleet Orchestrator](https://github.com/Lucineer/fleet-orchestrator)
+- [Dead Reckoning Engine](https://github.com/Lucineer/dead-reckoning-engine)
+- [Dream Engine](https://github.com/Lucineer/dream-engine)
+- [Seed UI (5 layers)](https://github.com/Lucineer/seed-ui)
 
-## Success Metrics
-1. **Captain adoption**: >80% daily active use
-2. **Time saving**: >30min/day on logbook reporting
-3. **Accuracy**: >95% species classification (with captain correction)
-4. **Reliability**: <1 unplanned downtime per quarter
+**For power users**
+
+- [Cocapn Lite (tabula rasa)](https://github.com/Lucineer/cocapn-lite)
+- [Cocapn (core platform)](https://github.com/Lucineer/cocapn)
+- [ZeroClaw (framework)](https://github.com/Lucineer/zeroclaw)
+
+[View all 106 repos →](https://github.com/orgs/Lucineer/repositories)
+[Fleet manifest →](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+
+</details>
+
+
+## Philosophy
+
+> The repo is the agent. The agent is the repo. Intelligence crystallizes from fluid (LLM calls) to solid (code). The vessel becomes faster and cheaper as it becomes smarter.
+
+- **Fork-first** — Power users fork and customize. Casual users visit the domain.
+- **Pay-for-convenience** — We save you costs through bulk inference, not markups.
+- **Git as coordination** — Agents compete via PRs, not chat.
+- **Soft actualization** — Vessels evolve gently based on usage, not hard updates.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE)
-
----
-
-**fishinglog.ai** — Because the best AI earns its sea legs alongside you.
+MIT · Superinstance & Lucineer (DiGennaro et al.)
