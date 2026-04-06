@@ -21,6 +21,7 @@ export default {
     if (u.pathname === '/api/efficiency') return new Response(JSON.stringify({ totalCached: 0, totalHits: 0, cacheHitRate: 0, tokensSaved: 0, repo: 'fishinglog-ai', timestamp: Date.now() }), { headers: { 'Content-Type': 'application/json' } });
     if (u.pathname === '/health')
       return new Response(JSON.stringify({ status: 'ok', agent: 'FishingLog' }), { headers: { 'Content-Type': 'application/json' } });
+    if (u.pathname === '/vessel.json') { try { const vj = await import('./vessel.json', { with: { type: 'json' } }); return new Response(JSON.stringify(vj.default || vj), { headers: { 'Content-Type': 'application/json' } }); } catch { return new Response('{}', { headers: { 'Content-Type': 'application/json' } }); } }
     if (u.pathname === '/setup')
       return new Response(generateSetupHTML('FishingLog', '#0d9488'), { headers: { 'Content-Type': 'text/html;charset=utf-8' } });
     if (u.pathname === '/api/byok' && req.method === 'GET') {

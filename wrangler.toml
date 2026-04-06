@@ -1,10 +1,11 @@
 name = "fishinglog-ai"
+account_id = "049ff5e84ecf636b53b162cbb580aae6"
 main = "src/worker.ts"
 compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
 binding = "MEMORY"
-id = "6eb837f3c266424497edde309a82f35f"
+id = "90443814bb804cecb2e75a875d5d61f3"
 
 [vars]
 AGENT_NAME = "FishingLog"
