@@ -1,73 +1,56 @@
-# fishinglog-ai
+# fishinglog-ai 🎣
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
-</p>
-
-<h3 align="center">An Edge AI Fishing Log</h3>
-
-<p align="center">Log catches, identify species, and interact via voice. Runs on your own infrastructure.</p>
-
-<p align="center">
-  <a href="#quick-start">Quick Start</a> ·
-  <a href="#how-it-works">How It Works</a> ·
-  <a href="#limitations">Limitations</a> ·
-  <a href="https://github.com/Lucineer/fishinglog-ai/issues">Issues</a>
-</p>
-
----
+You stop writing good catch notes after the third beer. This remembers for you. Upload a photo for a species ID or ask a question about local techniques. It runs on your infrastructure and commits every interaction directly to your own repository.
 
 **Live Instance:** [fishinglog-ai.casey-digennaro.workers.dev](https://fishinglog-ai.casey-digennaro.workers.dev)
 
----
+Fork this repository, deploy it to a Cloudflare Worker with your API keys, and start logging. Every conversation and correction is saved as a commit to your fork. No one else holds your data.
 
-You're on the water. Your hands are wet. The last thing you need is another app that requires menu navigation and sells your data.
+## Why This Exists
 
-This is a self-contained fishing log you host yourself. It uses local image classification and a voice interface to help you record catches without taking out your phone.
-
-### How It Works
-This is an agent built on the Cocapn Fleet protocol. You fork the repository and deploy it to a Cloudflare Worker. It uses your own API keys for its language model and stores its memory as commits to your repository. This design means you control all data and can run it offline on compatible hardware like a Jetson.
+Most fishing apps monetize your log data. This one doesn’t. It was built for anglers who prefer trusting their GitHub account over a third-party platform.
 
 ## Quick Start
 
-Fork this repository to create your own independent copy.
-
-1.  Clone your fork and install dependencies:
+1.  **Fork** this repository to your GitHub account.
+2.  Clone your fork locally:
     ```bash
     git clone https://github.com/your-username/fishinglog-ai
     cd fishinglog-ai
     npm install
     ```
-2.  Authenticate with Cloudflare:
+3.  Log in to Cloudflare:
     ```bash
     npx wrangler login
     ```
-3.  Set your required API keys as secrets (these are stored in your Cloudflare account):
+4.  Set your required secrets (you only do this once):
     ```bash
-    npx wrangler secret put GITHUB_TOKEN # A token for your repo
-    npx wrangler secret put DEEPSEEK_API_KEY # Or another LLM key
+    # A GitHub token with 'repo' permissions
+    npx wrangler secret put GITHUB_TOKEN
+    # Your DeepSeek or other LLM API key
+    npx wrangler secret put DEEPSEEK_API_KEY
     ```
-4.  Deploy:
+5.  Deploy the Worker:
     ```bash
     npx wrangler deploy
     ```
 
-Your instance will be live at your assigned `*.workers.dev` domain.
+Your instance is live in about 10 seconds. It only communicates with your repo and your chosen LLM API.
 
-## Features
+## What It Does
 
-*   **Local Species Classification**: Identifies common salt and freshwater species from photos using a local model. Photos are processed on your deployed Worker.
-*   **Voice Interface**: Log catches and ask questions via voice commands using your device's microphone.
-*   **Conversational Memory**: Corrections and notes you provide are saved to its repository-based memory for future sessions.
-*   **Model Flexibility**: Configure it to use DeepSeek, SiliconFlow, local Llama.cpp servers, or any OpenAI-compatible API.
-*   **Session Context**: Retains details about your current fishing trip, including location and recent activity.
+*   **Identify Fish:** Provides species identification for common North American saltwater and freshwater game fish from your photos.
+*   **Answer Questions:** Responds to queries about techniques, regulations, or conditions based on the notes you’ve previously logged.
+*   **Voice Logging:** Dictate catch notes hands-free.
+*   **Own Your Data:** All logs are saved as Markdown files in your repository. There is no separate database or export step.
+*   **Swap Models:** Configure it to use different compatible LLM APIs.
 
-## Limitations
+## Honest Limitation
 
-The initial species classification model is a generalist. It performs well on clear, well-framed photos of common gamefish but can struggle with unusual species, poor lighting, or ambiguous angles. You train it by providing corrective feedback, which improves its future accuracy for your specific catches.
+Species identification is optimized for common North American game fish. It may struggle with rare species, juveniles, or photos where the fish occupies less than 10% of the frame.
 
----
-<div align="center">
-  <sub>Part of the Cocapn Fleet. Built by <a href="https://superinstance.com">Superinstance</a> & <a href="https://lucineer.ai">Lucineer (DiGennaro et al.)</a>.</sub><br>
-  <sub>Fleet: <a href="https://the-fleet.casey-digennaro.workers.dev">the-fleet.casey-digennaro.workers.dev</a> · Protocol: <a href="https://cocapn.ai">cocapn.ai</a></sub>
-</div>
+## Architecture
+
+This is a stateless agent built on the Cocapn Fleet protocol, running on a Cloudflare Worker. It has zero runtime dependencies and is MIT licensed.
+
+<div style="text-align:center;padding:16px;color:#64748b;font-size:.8rem"><a href="https://the-fleet.casey-digennaro.workers.dev" style="color:#64748b">The Fleet</a> &middot; <a href="https://cocapn.ai" style="color:#64748b">Cocapn</a></div>
