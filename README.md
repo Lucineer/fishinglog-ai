@@ -4,76 +4,70 @@
   <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
 </p>
 
-<h3 align="center">Edge AI Fishing Vessel</h3>
+<h3 align="center">An Edge AI Fishing Log</h3>
 
-<p align="center">Species classification, captain voice interface, and conversational training.</p>
+<p align="center">Log catches, identify species, and interact via voice. Runs on your own infrastructure.</p>
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
-  <a href="#features">Features</a> ·
-  <a href="#the-fleet">The Fleet</a> ·
+  <a href="#how-it-works">How It Works</a> ·
+  <a href="#limitations">Limitations</a> ·
   <a href="https://github.com/Lucineer/fishinglog-ai/issues">Issues</a>
 </p>
 
 ---
 
-**Live:** [fishinglog-ai](https://fishinglog-ai.casey-digennaro.workers.dev) · **Powered by [Capitaine](https://github.com/Lucineer/capitaine)**
+**Live Instance:** [fishinglog-ai.casey-digennaro.workers.dev](https://fishinglog-ai.casey-digennaro.workers.dev)
 
 ---
 
-You are out before sunrise. The radio is quiet. You have a fish on. You do not want to unlock your phone or sign into an app. You do not want a service logging your coordinates.
+You're on the water. Your hands are wet. The last thing you need is another app that requires menu navigation and sells your data.
 
-This is not another fishing log. It's an edge AI vessel you run yourself. It operates where you do. It learns what you teach it. And it does not work for anyone else.
+This is a self-contained fishing log you host yourself. It uses local image classification and a voice interface to help you record catches without taking out your phone.
 
-### Why this exists
-Most fishing apps follow the same model: you provide your data, they provide a log. They can mine it, advertise, and may shut down.
-
-fishinglog-ai is built the other way. You fork it. You deploy it. You own every part. It runs on the edge, can operate offline on your hardware, and learns with you. This is a tool you control.
-
-### What makes this different
-Many AI agents are interfaces to a remote, controlled model. This is a Cocapn Fleet vessel:
-- The repository *is* the agent. Each commit builds its memory. Each fork creates a new, independent captain.
-- It runs on Cloudflare Workers, or locally on compatible hardware like a Jetson. It uses no permanent external databases.
-- It uses an open protocol and can share information with other trusted vessels, but only with your explicit permission.
-- It improves over time. Vessels in the fleet can share non-sensitive improvements back upstream if you choose.
-
----
+### How It Works
+This is an agent built on the Cocapn Fleet protocol. You fork the repository and deploy it to a Cloudflare Worker. It uses your own API keys for its language model and stores its memory as commits to your repository. This design means you control all data and can run it offline on compatible hardware like a Jetson.
 
 ## Quick Start
 
-This becomes yours when you fork it.
+Fork this repository to create your own independent copy.
 
-1.  Fork and clone the repository.
-2.  Install Wrangler and log in: `npx wrangler login`
-3.  Set two secrets for your API keys:
+1.  Clone your fork and install dependencies:
     ```bash
-    echo "your-github-token" | npx wrangler secret put GITHUB_TOKEN
-    echo "your-llm-key" | npx wrangler secret put DEEPSEEK_API_KEY
+    git clone https://github.com/your-username/fishinglog-ai
+    cd fishinglog-ai
+    npm install
     ```
-4.  Deploy: `npx wrangler deploy`
+2.  Authenticate with Cloudflare:
+    ```bash
+    npx wrangler login
+    ```
+3.  Set your required API keys as secrets (these are stored in your Cloudflare account):
+    ```bash
+    npx wrangler secret put GITHUB_TOKEN # A token for your repo
+    npx wrangler secret put DEEPSEEK_API_KEY # Or another LLM key
+    ```
+4.  Deploy:
+    ```bash
+    npx wrangler deploy
+    ```
 
-Your vessel is now live.
+Your instance will be live at your assigned `*.workers.dev` domain.
 
 ## Features
 
-- **Species Classification**: Identifies a range of salt and freshwater species. Runs locally; photos do not leave your device.
-- **Captain Voice Interface**: Log catches, get conditions, and mark spots using voice commands over your boat speakers.
-- **Conversational Training**: Correct its identifications. It uses your feedback to improve future interactions with you.
-- **Bring Your Own Keys**: API keys are stored in Cloudflare Secrets, not in code.
-- **Multi-Model Support**: Works with DeepSeek, SiliconFlow, DeepInfra, Moonshot, z.ai, and compatible local endpoints.
-- **Session Memory**: Maintains context of your trips and catches during a session.
-- **PII Safety**: By default, it removes precise locations and personal identifiers from any data shared externally.
+*   **Local Species Classification**: Identifies common salt and freshwater species from photos using a local model. Photos are processed on your deployed Worker.
+*   **Voice Interface**: Log catches and ask questions via voice commands using your device's microphone.
+*   **Conversational Memory**: Corrections and notes you provide are saved to its repository-based memory for future sessions.
+*   **Model Flexibility**: Configure it to use DeepSeek, SiliconFlow, local Llama.cpp servers, or any OpenAI-compatible API.
+*   **Session Context**: Retains details about your current fishing trip, including location and recent activity.
 
-**One Limitation**: Full offline functionality requires you to host and manage your own local inference endpoint for the AI model; the default cloud deployment still relies on external API calls.
+## Limitations
+
+The initial species classification model is a generalist. It performs well on clear, well-framed photos of common gamefish but can struggle with unusual species, poor lighting, or ambiguous angles. You train it by providing corrective feedback, which improves its future accuracy for your specific catches.
 
 ---
-
 <div align="center">
-  <br>
-  Part of the Cocapn Fleet.
-  <br>
-  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> ·
-  <a href="https://cocapn.ai">Cocapn</a>
-  <br><br>
-  <sub>Attribution: Superinstance & Lucineer (DiGennaro et al.).</sub>
+  <sub>Part of the Cocapn Fleet. Built by <a href="https://superinstance.com">Superinstance</a> & <a href="https://lucineer.ai">Lucineer (DiGennaro et al.)</a>.</sub><br>
+  <sub>Fleet: <a href="https://the-fleet.casey-digennaro.workers.dev">the-fleet.casey-digennaro.workers.dev</a> · Protocol: <a href="https://cocapn.ai">cocapn.ai</a></sub>
 </div>
