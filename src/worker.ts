@@ -20,6 +20,7 @@ export default {
 
     if (u.pathname === '/' || u.pathname === '')
       return new Response(HTML, { headers: { 'Content-Type': 'text/html', 'Content-Security-Policy': CSP;charset=utf-8' } });
+      'X-Frame-Options': 'DENY',
     if (u.pathname === '/api/efficiency') return new Response(JSON.stringify({ totalCached: 0, totalHits: 0, cacheHitRate: 0, tokensSaved: 0, repo: 'fishinglog-ai', timestamp: Date.now() }), { headers: { 'Content-Type': 'application/json' } });
     if (u.pathname === '/health')
       return new Response(JSON.stringify({ status: 'ok', agent: 'FishingLog' }), { headers: { 'Content-Type': 'application/json' } });
